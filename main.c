@@ -6,11 +6,12 @@
 #include"1602.h"
 #include"delay.h"
 #include"keyboard.h"
+#include"uart.h"
 
 
 unsigned char code password[]={1,2,3,4,5,6,7,8};//可以更改此密码做多组测试
 //定义密码，实际上密码需要存在eeprom中，可以通过程序更改。请用户自行添加
-
+unsigned char str[32],count,Temp;		//这里先不用赋初值，因为单片机初始化的时候会调用一次串口导致count+1
 /*------------------------------------------------
                     主程序
 ------------------------------------------------*/
@@ -23,13 +24,13 @@ main()
  bit Flag;
  
  PLEN=sizeof(password)/sizeof(password[0]);//用于计算出实际密码长度
- 
+ uart_init();		//初始化串口
  LCD_Init();         //初始化液晶屏
  DelayMs(10);        //延时用于稳定，可以去掉
  LCD_Clear();        //清屏
  LCD_Write_String(0,0,"  Welcome! ");    //写入第一行信息，主循环中不再更改此信息，所以在while之前写入
  LCD_Write_String(0,1,"Input password!");    //写入第二行信息，提示输入密码
-
+ count=0;
  
 while (1)         //主循环
   {
@@ -80,4 +81,30 @@ while (1)         //主循环
     }	
   }		
 }
+void uart_rx(void) interrupt 4
+{ 
+if(RI)                        //判断是接收中断产生
+     {
+      RI=0;                      //标志位清零
+      Temp=SBUF;                 //读入缓冲区的值
+      
+	  
+      if(count < 9)
+      {	
+        str[count] = Temp;
+        count++;
+      }
+      if(count == 9)
+      {
+         str[count] = '\0';
+		 P1=0x00;
+         LCD_Write_String(0,0,str);
+		 count=0;
+		 
+      }                   //把值输出到P1口，用于观察
+                  //把接收到的值再发回电脑端
+     }
+   if(TI)                        //如果是发送标志位，清零
+     TI=0;
 
+} 
