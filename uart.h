@@ -2,3 +2,4 @@
 #define __UART_H__
 
 void uart_init();
+#endif

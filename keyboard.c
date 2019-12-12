@@ -5,7 +5,7 @@
 #include"keyboard.h"
 #include"delay.h"
 
-#define KeyPort P3
+#define KeyPort P1
 
 /*------------------------------------------------
 按键扫描函数，返回扫描键值
@@ -37,21 +37,21 @@ unsigned char KeyPro(void)
 {
  switch(KeyScan())
  {
-  case 0x7e:return 0;break;//0 按下相应的键显示相对应的码值
-  case 0x7d:return 1;break;//1
-  case 0x7b:return 2;break;//2
-  case 0x77:return 3;break;//3
-  case 0xbe:return 4;break;//4
-  case 0xbd:return 5;break;//5
-  case 0xbb:return 6;break;//6
+  case 0x7e:return 'A'-'0';break;//0 按下相应的键显示相对应的码值
+  case 0x7d:return 'B'-'0';break;//1
+  case 0x7b:return 'C'-'0';break;//2
+  case 0x77:return 'D'-'0';break;//3
+  case 0xbe:return 3;break;//4
+  case 0xbd:return 6;break;//5
+  case 0xbb:return 9;break;//6
   case 0xb7:return 7;break;//7
-  case 0xde:return 8;break;//8
-  case 0xdd:return 9;break;//9
-  case 0xdb:return 10;break;//a
-  case 0xd7:return 11;break;//b
-  case 0xee:return 12;break;//c
-  case 0xed:return 13;break;//d
-  case 0xeb:return 14;break;//e
+  case 0xde:return 2;break;//8
+  case 0xdd:return 5;break;//9
+  case 0xdb:return 8;break;//a
+  case 0xd7:return 0;break;//b
+  case 0xee:return 1;break;//c
+  case 0xed:return 4;break;//d
+  case 0xeb:return 7;break;//e
   case 0xe7:return 15;break;//f
   default:return 0xff;break;
  }
